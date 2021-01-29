@@ -1,7 +1,8 @@
 import os
 import requests
 import random
-import json 
+import json
+from datetime import datetime
 
 config = {}
 with open('config.json', 'r') as f:
@@ -32,9 +33,15 @@ for pics in pictures:
             f.write('\n')
             f.close()
             break
+#set message
+time = datetime.now()
+if time.hour == 5: #msk time
+	caption = random.choice(config['caption_night'])
+else:
+	caption = random.choice(config['caption'])
 #post				    
 url = "https://api.telegram.org/bot{}/sendPhoto".format(config['token'])
 files = {'photo': open(pic_path, 'rb')}
-data = {'chat_id' : config['channel_name'], 'caption': random.choice(config['caption'])}
-r= requests.post(url, files=files, data=data)
+data = {'chat_id' : config['channel_name'], 'caption': caption}
+r = requests.post(url, files=files, data=data)
 
