@@ -22,7 +22,7 @@ posted = open(archive_path).read()
 
 pictures = os.listdir(picdir)
 for pics in pictures:
-    if pics.lower().endswith(('.png', '.jpg', '.gif','.jpeg')):
+    if pics.lower().endswith(('.png', '.jpg', '.jpeg')):
         if pics in posted:
             print('Picture already posted: %s' % (pics))
         else:
@@ -33,15 +33,18 @@ for pics in pictures:
             f.write('\n')
             f.close()
             break
-#set message
+#set message 
+#cheking only hour without minutes
 time = datetime.now()
-if time.hour == 5: #msk time
+if time.hour == 24: 
 	caption = random.choice(config['caption_night'])
+elif time.hour == 10:
+    caption = random.choice(config['caption_morning'])
 else:
-	caption = random.choice(config['caption'])
+	caption = random.choice(config['caption_default'])
+    
 #post				    
 url = "https://api.telegram.org/bot{}/sendPhoto".format(config['token'])
 files = {'photo': open(pic_path, 'rb')}
 data = {'chat_id' : config['channel_name'], 'caption': caption}
 r = requests.post(url, files=files, data=data)
-
